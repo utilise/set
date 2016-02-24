@@ -136,5 +136,24 @@ describe('set', function() {
     expect(changes).to.be.eql([{ key: 'bar', value: 'baz', type: 'add' }])
   })
 
+  it('should update immutable deeply', function(){
+    var changes = []
+      , o = versioned({ a: { b: { c: 5 }}}).on('log', function(diff){ changes.push(diff) })
+
+    expect(o).to.eql({ a: { b: { c: 5 }}})
+    expect(o.log.length).to.eql(1) 
+    expect(last(o.log).diff).to.eql(undefined)
+    expect(last(o.log).value.toJS()).to.eql({ a: { b: { c: 5 }}})
+    expect(changes).to.eql([])
+
+    expect(set.commit(o, { key: 'a.b.c', value: 10, type: 'update' })).to.eql(o)
+    expect(o.log.length).to.eql(2)
+    expect(last(o.log).diff).to.eql({ key: 'a.b.c', value: 10, type: 'update' })
+    expect(last(o.log).value.toJS()).to.eql({ a: { b: { c: 10 }}})
+    expect(changes).to.eql([
+      { key: 'a.b.c', value: 10, type: 'update' }
+    ])
+  })
+
 })
 
