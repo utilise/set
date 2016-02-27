@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "utilise.is": "*",
+    "utilise.key": "*",
     "utilise.last": "*",
     "utilise.str": "*"
   }
