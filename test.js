@@ -211,6 +211,10 @@ describe('set', function() {
     expect(set({ key: 'foo', value: 'bar', type: 'add' })(false)).to.be.eql(false)
     expect(set({ key: 'foo', value: 'bar', type: 'add' })(5)).to.be.eql(5)
     expect(set({ key: 'foo', value: 'bar', type: 'add' })('foo')).to.be.eql('foo')
+    expect(set(true)({})).to.be.eql({})
+    expect(set(false)({})).to.be.eql({})
+    expect(set(5)({})).to.be.eql({})
+    expect(set('foo')({})).to.be.eql({})
   })
 
   it('should work on non-versioned data', function(){

@@ -5,7 +5,7 @@ var last = require('utilise.last')
 
 module.exports = exports = function set(diff) {
   return function(o) {
-    if (!o || !is.obj(o)) return o
+    if (!o || !is.obj(o) || !diff || !is.obj(diff)) return o
     var key = str(diff.key)
     act.raw[diff.type](o, key, diff.value)
     return set.commit(o, { key: key, value: diff.value, type: diff.type })
