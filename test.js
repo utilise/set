@@ -1,5 +1,4 @@
-var emitterify = require('utilise.emitterify')
-  , expect = require('chai').expect
+var expect = require('chai').expect
   , last = require('utilise.last')
   , set = require('./')
 
