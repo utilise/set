@@ -52,6 +52,12 @@ describe('set', function() {
   , {}
   ))
 
+  it('should set value - array - push', test(
+    []
+  , { key: '0', value: 'foo', type: 'add' }
+  , ['foo']
+  ))
+
   it('should set value - array - add', function() {
     test(
       [1, 2, 3]

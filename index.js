@@ -35,12 +35,12 @@ module.exports = function set(d) {
 function apply(body, type, path, value) {
   var next = path.shift()
 
-  if (!(next in body)) 
-    if (type == 'remove') return
-    else body[next] = {}
-
-  if (path.length)
+  if (path.length) { 
+    if (!(next in body)) 
+      if (type == 'remove') return
+      else body[next] = {}
     apply(body[next], type, path, value)
+  }
   else 
     act[type](body, next, value)
 }
