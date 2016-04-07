@@ -116,28 +116,30 @@ describe('set', function() {
     var result
 
     // init
-    var a = set()({ a: 1 })
+    var a = set()({ a: 1 }, null, 10)
     expect(a).to.eql({ a: 1 })
     expect(a.on).to.be.a('function')
     expect(a.log).to.be.eql([{ type: 'update', value: { a: 1 }, time: 0 }])
 
     // branch from existing log
-    var b = set()({ b: 1 }, [1, 2, 3])
+    var b = set()({ b: 1 }, [1, 2, 3], 10)
     expect(b).to.eql({ b: 1 })
     expect(b.on).to.be.a('function')
     expect(b.log).to.be.eql([1, 2, 3, { type: 'update', value: { b: 1 }, time: 3 }])
 
     // branch from existing log
+    /* istanbul ignore next */
     b.on('change', function(){ result = true })
-    var c = set()(b, [1, 2, 3, 4, 5])
+    var c = set()(b, [1, 2, 3, 4, 5], 10)
     expect(c).to.eql({ b: 1 }).to.not.equal(b)
     expect(c.on).to.be.a('function')
     expect(result).to.not.be.ok
     expect(c.log).to.be.eql([1, 2, 3, 4, 5, { type: 'update', value: { b: 1 }, time: 5 }])
     
     // branch from same log
+    /* istanbul ignore next */
     c.on('change', function(){ result = true })
-    var d = set()(c)
+    var d = set()(c, null, 10)
     expect(d).to.eql({ b: 1 }).to.not.equal(c)
     expect(d.on).to.be.a('function')
     expect(result).to.not.be.ok
@@ -148,7 +150,7 @@ describe('set', function() {
   })
 
   it('should log and emit change - object', function(){
-    var o = set()({}).on('change', function(diff){ changes.push(diff) })
+    var o = set()({}, null, 10).on('change', function(diff){ changes.push(diff) })
       , changes = [o.log[0]]
 
     expect(o).to.eql({})
@@ -191,6 +193,38 @@ describe('set', function() {
     expect(set(false)({})).to.be.eql({})
     expect(set(5)({})).to.be.eql({})
     expect(set('foo')({})).to.be.eql({})
+  })
+
+  it('should create hollow log if max negative', function(){
+    var result
+
+    // init
+    var a = set()({ a: 1 }, [], -1)
+    expect(a).to.eql({ a: 1 })
+    expect(a.on).to.be.a('function')
+    expect(a.log.max).to.be.eql(-1)
+    expect(a.log).to.be.eql([null])
+
+    expect(set({ key: 'b', value: 2, type: 'add' })(a)).to.be.eql(a)
+    expect(a.log.max).to.be.eql(-1)
+    expect(a.log).to.be.eql([null, null])
+
+    expect(set()(a)).to.be.eql(a)
+    expect(a.log.max).to.be.eql(-1)
+    expect(a.log).to.be.eql([null, null])
+  })
+
+  it('should create no log if max zero', function(){
+    var result
+
+    // init
+    var a = set()({ a: 1 }, [], 0)
+    expect(a).to.eql({ a: 1 })
+    expect(a.on).to.be.a('function')
+    expect(a.log).to.be.eql([])
+
+    expect(set({ key: 'b', value: 2, type: 'add' })(a)).to.be.eql(a)
+    expect(a.log).to.be.eql([])
   })
 
 })
