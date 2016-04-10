@@ -198,8 +198,7 @@ describe('set', function() {
   it('should create hollow log if max negative', function(){
     var result
 
-    // init
-    var a = set()({ a: 1 }, [], -1)
+    var a = set()({ a: 1 }, [], -1).on('change', function(d){ result = d })
     expect(a).to.eql({ a: 1 })
     expect(a.on).to.be.a('function')
     expect(a.log.max).to.be.eql(-1)
@@ -208,16 +207,16 @@ describe('set', function() {
     expect(set({ key: 'b', value: 2, type: 'add' })(a)).to.be.eql(a)
     expect(a.log.max).to.be.eql(-1)
     expect(a.log).to.be.eql([null, null])
+    expect(result).to.eql({ key: 'b', value: 2, type: 'add', time: 1 })
 
     expect(set()(a)).to.be.eql(a)
     expect(a.log.max).to.be.eql(-1)
-    expect(a.log).to.be.eql([null, null])
+    expect(a.log).to.be.eql([null, null, null])
   })
 
   it('should create no log if max zero', function(){
     var result
 
-    // init
     var a = set()({ a: 1 }, [], 0)
     expect(a).to.eql({ a: 1 })
     expect(a.on).to.be.a('function')
