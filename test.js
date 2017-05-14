@@ -226,6 +226,27 @@ describe('set', function() {
     expect(a.log).to.be.eql([])
   })
 
+  it('should return false if unsuccessful', function(){
+    var o = set()({}, null, 10)
+      , result = false
+    o.on('change', function(){ result = true })
+
+    expect(set({ type: 'dafuq', key: 'foo' })(o)).to.be.eql(false)
+    expect(o).to.be.eql({})
+    expect(o.log.length).to.be.eql(1)
+    expect(result).to.be.eql(false)
+
+    expect(set({ type: 'dafuq' })(o)).to.be.eql(false)
+    expect(o).to.be.eql({})
+    expect(o.log.length).to.be.eql(1)
+    expect(result).to.be.eql(false)
+
+    expect(set({ type: 'update', key: 'foo', value: 'bar' })(o)).to.be.eql(o)
+    expect(o).to.be.eql({ foo: 'bar' })
+    expect(o.log.length).to.be.eql(2)
+    expect(result).to.be.eql(true)
+  })
+  
 })
 
 function test(initial, diff, expected) {
