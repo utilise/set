@@ -112,6 +112,16 @@ describe('set', function() {
     )()
   })
 
+  it('should initialise and set on function', function(){
+    /* istanbul ignore next */
+    var fn = set()(function(){})
+    expect(fn.on).to.be.a('function')
+    expect(fn.log).to.be.a('array')
+
+    set({ type: 'update', key: 'foo', value: 'bar' })(fn)
+    expect(fn.foo).to.be.eql('bar')
+  })
+
   it('should init and branch', function(){
     var result
 
