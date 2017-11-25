@@ -40,6 +40,18 @@ describe('set', function() {
   , false
   ))
 
+  it('should set value - object - update - trailing dots', test(
+    {} 
+  , { key: '.foo.', value: 'boo', type: 'update' }
+  , { foo: 'boo' }
+  ))
+
+  it('should set value - object - update - only dots', test(
+    {} 
+  , { key: '..', value: { boo: 'boo' }, type: 'update' }
+  , { boo: 'boo' }
+  ))
+
   it('should set value - object - remove', test(
     { foo: 'bar' } 
   , { key: 'foo', value: 'bar', type: 'remove' }
