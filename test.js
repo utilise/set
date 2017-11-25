@@ -28,6 +28,18 @@ describe('set', function() {
   , { bar: { baz: 'boo' } }
   ))
 
+  it('should set value - object - update - root', test(
+    {} 
+  , { key: '', value: { boo: 'boo' }, type: 'update' }
+  , { boo: 'boo' }
+  ))
+
+  it('should set value - object - update - root (non-obj)', test(
+    {} 
+  , { key: '', value: 'boo', type: 'update' }
+  , false
+  ))
+
   it('should set value - object - remove', test(
     { foo: 'bar' } 
   , { key: 'foo', value: 'bar', type: 'remove' }
